@@ -1,0 +1,19 @@
+{
+  "name": "projekt_zaliczeniowy",
+  "version": "0.0.0",
+  "authors": [
+    "Krzysztof Ochędzan"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "angular": "1.2.x",
+    "bootstrap": "" 
+  },
+"exportsOverride": {
+		"jquery": {
+			"js": "dist/jquery.min.js"
+		}
+	}
+}
