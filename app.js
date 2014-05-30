@@ -82,17 +82,18 @@ app.post('/login',
 );
 
 app.get('/login', function (req, res) {
-	res.redirect('login.html');
+	return res.redirect('login.html');
 });
 
 app.get('/fail', function (req, res) {
-    res.redirect('login');
+	return res.redirect('login.html');
 });
 
 app.get('/', function(req, res) {
     if (req.user) {
 		return res.redirect('logged');
-    } else {
+    } 
+    else {
         return res.redirect('login');
     }
 });
@@ -104,8 +105,9 @@ app.get('/', function(req, res) {
 app.get('/logged', function (req, res) {
   if(req.user && req.user.admin === 'admin'){
       return res.redirect('admin.html');
-  }else{
-     return res.redirect('logged.html');
+  }
+  else{
+     return res.redirect('logged.html', {username: req.user.nick});
   }
 });
 
