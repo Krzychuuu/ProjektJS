@@ -1,8 +1,8 @@
 html,
 body {
   padding: 0px;
-  padding-left:10px;
-  padding-right:10px;
+  padding-left: 10px;
+  padding-right: 10px;
   margin: 0px;
 }
 A {
@@ -19,6 +19,11 @@ A:hover {
 .bulb img {
   height: 18px;
   vertical-align: bottom;
+}
+.error {
+  color: red;
+  font-family: arial;
+  font-size: 10pt;
 }
 #container {
   border: 2px solid #cccc00;

@@ -7,9 +7,9 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="angular/angular.min.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/registration_validation.js"></script>
 <link rel="stylesheet" type="text/css" href="css/style.css">
   <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="js/registration_validation.js"></script>
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </head>
@@ -42,20 +42,17 @@
 	  <div class="jumbotron">
 	  	
 	  		<form action="/register_user" method="post">
-				<p class="error"></p>
-				<label>Nazwa użytkownika:</label> 
+				<label>Nazwa użytkownika:</label><br>
 				<input type="text" id="nick" name="nick"/>
-				<label class="error" id="nick_error"></label>
 				<br>
-			    <label>Hasło:</label></td>
+			    <label>Hasło:</label><br>
 				<input type="password" id="password" name="password"/>
-				<label class="error" id="password_error"></label>
 				<br>
-				<label>Potwierdź hasło:</label></td>
+				<label>Potwierdź hasło:</label><br>
 				<input type="password" id="confirm_password" name="confirm_password"/>
-				<label class="error" id="confirm_password_error"></label>
 				<br>
 				<input id="confirm_registration" type="submit" value="Rejestruj"/>
+				<p class="error" id="error_message"></p>
 			</form>
 	  </div>
 	  <div id="footer">
