@@ -1,4 +1,4 @@
-<html>
+<html ng-app>
 
 <head>
 <meta http-equiv="Content-Language" content="pl">
@@ -7,6 +7,7 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="angular/angular.min.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/registration_validation.js"></script>
 <link rel="stylesheet" type="text/css" href="css/style.css">
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
@@ -30,19 +31,32 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
-     
        <ul class="nav navbar-nav navbar-right">
           <li><a href="/login">Zaloguj</a></li>
           <li><a href="/signup">Zarejestruj się</a></li>
        </ul>
-
+      
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
 	  <div class="jumbotron">
-	  	<p>Witaj w wypożyczalni książek online.</p>
-	  	<p>Zaloguj się lub zarejestruj by móc z niej korzystać.</p>
+	  	
+	  		<form action="/register_user" method="post">
+				<p class="error"></p>
+				<label>Nazwa użytkownika:</label> 
+				<input type="text" id="nick" name="nick"/>
+				<label class="error" id="nick_error"></label>
+				<br>
+			    <label>Hasło:</label></td>
+				<input type="password" id="password" name="password"/>
+				<label class="error" id="password_error"></label>
+				<br>
+				<label>Potwierdź hasło:</label></td>
+				<input type="password" id="confirm_password" name="confirm_password"/>
+				<label class="error" id="confirm_password_error"></label>
+				<br>
+				<input id="confirm_registration" type="submit" value="Rejestruj"/>
+			</form>
 	  </div>
 	  <div id="footer">
 	  	<div class="container"><p><b><i>(C)opyright by: Krzysztof Ochędzan.</i></b></p></div>

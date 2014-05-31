@@ -91,27 +91,52 @@ app.get('/fail', function (req, res) {
 
 app.get('/', function(req, res) {
     if (req.user) {
-		return res.redirect('logged');
+		return res.redirect('/logged');
     } 
     else {
-        return res.redirect('login');
+        return res.redirect('/login');
     }
 });
 
-// app.get('/logged', function (req, res) {
-	// res.redirect('logged.html');	
-// });
+app.get('/logout', function (req, res) {
+    console.log('Zakończenie sesji użytkownika');
+    req.logout();
+    client.end(function(err) {
+    console.log("Rozłączono z bazą danych");
+  });
+    return res.redirect('/');
+});
 
 app.get('/logged', function (req, res) {
   if(req.user && req.user.admin === 'admin'){
       return res.redirect('admin.html');
   }
   else{
-     return res.redirect('logged.html', {username: req.user.nick});
+     return res.redirect('logged.html');
   }
 });
 
 
+// rejestracja usera
+app.get('/signup', function (req, res) {
+	return res.redirect('signup.html');
+});
+
+app.post('/register_user', function (req, res) {
+	var data = req.body;
+	delete data['confirm_password'];
+	registerUser(data);
+	return res.redirect('/');
+});
+var registerUser = function(data) {
+    client = mysql.createConnection(sqlInfo);
+    var sql = client.query('INSERT INTO users SET ? ;',data,function (err,rows){
+	console.log("registered");
+    if(err){
+      console.log(err);           
+    }
+  });
+};
 
 server = http.createServer(app);
 
