@@ -107,6 +107,11 @@ app.get('/admin.html', function (req, res)
 	return res.redirect('/');
 });
 
+app.get('/show_books', function (req, res)
+{
+	return res.redirect('show_books.html');
+});
+
 app.get('/', function(req, res)
 {
     if (req.user) {
@@ -141,6 +146,16 @@ app.get('/logged', function (req, res)
   }
 });
 
+
+app.get('/book_list_avaible', function (req, res) {
+    client = mysql.createConnection(sqlInfo);
+    client.query('SELECT title,author,description FROM books ;',function (err,rows){
+    if(err){
+      console.log(err);           
+    }
+       return res.send(rows);  
+    });
+});
 
 ///////////////////////////////////////////
 //     rejestracja usera

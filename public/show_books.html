@@ -1,15 +1,15 @@
-<html>
+<html ng-app>
 
 <head>
 <meta http-equiv="Content-Language" content="pl">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1250">
 <title>Wypożyczalnia książek</title>
-  <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="angular/angular.min.js"></script>
-  <script src="js/main.js"></script>
-<link rel="stylesheet" type="text/css" href="css/style.css">
 
+<link rel="stylesheet" type="text/css" href="css/style.css">
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="js/main.js"></script>
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </head>
@@ -32,7 +32,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
        <ul class="nav navbar-nav">
-        <li id="give_book_list_nonadmin"><a>Pokaż Książki</a></li>
+        <li><a href="show_books">Pokaż Książki</a></li>
        </ul>
        <ul class="nav navbar-nav">
         <li class="dropdown">
@@ -52,7 +52,7 @@
   </div><!-- /.container-fluid -->
 </nav>
 	  <div class="jumbotron">
-<p id="logged_p_content">Skorzystaj z panelu u góry.</p>
+	  	<p id="test_book_list">sprawdźmy</p>
 	  </div>
 	  <div id="footer">
 	  	<div class="container"><p><b><i>(C)opyright by: Krzysztof Ochędzan.</i></b></p></div>
