@@ -39,19 +39,51 @@
   </div><!-- /.container-fluid -->
 </nav>
 	  <div class="jumbotron">
+	  	<div class="container">
 	  	
-	  		<h2>Witaj w Wypożyczalni książek online,</h2><br>
-	  	<h4>Zaloguj się bądź zarejestruj by móc z niej korzystać.</h4><br>
+	  		<h2>Witaj w wypożyczalni książek online.</h2><br>
+	  	<h4>Zarejestruj się bądź zaloguj by móc z niej korzystać.</h4><br>
 	  				<h3>Panel logowania</h3>
-			<form action="/login" method="post">
-					<input type="text" id="username" name="username"/><label> -- Użytkownik</label><br/>
-    				<input type="password" id="password" name="password"/><label> -- Hasło</label><br/>
+	  				<form action="/login" method="post">
+	  				<table border="0" width="1" cellspacing="0" cellpadding="0" height="1">
+	<tr>
+		<td><img border="0" src="img/menubuttons/left-top3.jpg" width="7" height="6"></td>
+		<td background="img/menubuttons/top3.jpg"></td>
+		<td><img border="0" src="img/menubuttons/right-top3.jpg" width="8" height="6"></td>
+	</tr>
+	<tr>
+		<td background="img/menubuttons/left3.jpg"></td>
+		<td><label>Użytkownik:</label><br/>
+					<input type="text" id="username" name="username"/><br/>
+</td>
+		<td background="img/menubuttons/right3.jpg"></td>
+	</tr>
+	<tr>
+		<td><img border="0" src="img/menubuttons/left-mid3.jpg" width="7" height="8"></td>
+		<td background="img/menubuttons/middle3.jpg"></td>
+		<td><img border="0" src="img/menubuttons/right-mid3.jpg" width="8" height="8"></td>
+	</tr>
+	<tr>
+		<td background="img/menubuttons/left3.jpg"></td>
+		<td><label>Hasło:</label><br/>
+    				<input type="password" id="password" name="password"/><br/></td>
+		<td background="img/menubuttons/right3.jpg"></td>
+	</tr>
+	<tr>
+		<td><img border="0" src="img/menubuttons/left-bottom3.jpg" width="7" height="7"></td>
+		<td background="img/menubuttons/bottom3.jpg"></td>
+		<td><img border="0" src="img/menubuttons/right-bottom3.jpg" width="8" height="7"></td>
+	</tr>
+</table>
+			
+				    				
     				<input id="send_login" type="submit" value="Zaloguj"/>
 			</form>
 	  </div>
+	  </div>
 	  <div id="footer">
 	  	<div class="container"><p><b><i>(C)opyright by: Krzysztof Ochędzan.</i></b></p></div>
-	  </div>
+	  </div>`
   </div>
 
 </body>
