@@ -38,7 +38,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Wypożyczenia<b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Wyświetl</a></li>
+            <li id="give_rented_books_list_nonadmin"><a>Wyświetl</a></li>
             <li class="divider"></li>
             <li><a href="#">Zwróć</a></li>
           </ul>
@@ -52,7 +52,21 @@
   </div><!-- /.container-fluid -->
 </nav>
 	  <div class="jumbotron">
-<p id="logged_p_content">Skorzystaj z panelu u góry.</p>
+	  	<table id='booklist'><tbody>
+	  		<tr id='booklist_title_tr'>
+	  			<td>Tytuł</td>
+	  			<td>Autor</td>
+	  		</tr>
+	  		<tr id='book_description'>
+	  			<td>test title</td>
+	  			<td>test author</td>
+	  		</tr>
+	  		<tr style='display:table-row'>
+	  			<td colspan='2'>test description</td>
+	  		</tr>
+	  	</tbody></table>
+	  	
+	<p id="logged_p_content">Skorzystaj z panelu u góry.</p>
 	  </div>
 	  <div id="footer">
 	  	<div class="container"><p><b><i>(C)opyright by: Krzysztof Ochędzan.</i></b></p></div>
