@@ -186,12 +186,6 @@ app.get('/add_book', function (req, res)
 app.post('/add_book', function (req, res)
 {
 	var data = req.body;
-	addBook(data);
-	return res.redirect('/');
-});
-
-var addBook = function(data)
-{
     client = mysql.createConnection(sqlInfo);
    	var sql = client.query('INSERT INTO books SET ? ;',data,function (err,rows)
     {
@@ -201,7 +195,8 @@ var addBook = function(data)
 	    	console.log(err);           
 	    }
   	});
-};
+	return res.redirect('/');
+});
 
 ///////////////////////////////////////////
 //     mysql validation
@@ -209,39 +204,8 @@ var addBook = function(data)
 app.post('/user_existance', function (req, res)
 {
 	var nick_to_check = req.body.nick;
-	console.log(nick);
     client = mysql.createConnection(sqlInfo);
     client.query("select nick from users where nick='"+nick_to_check+"';",function (err,rows)
-    {
-		console.log(rows);
-		if(err)
-		{
-			console.log(err);           
-		}
-		if(rows) 
-		{
-			if(rows[0])
-			{
-		    	return res.send(true);  
-		  	}
-		  	else
-		  	{
-		    	return res.send(false);  
-		  	}
-		}
-		else
-		{
-			console.log("not found in db");
-			return res.send(false);  
-		}
-	});
-});
-app.post('/book_title_existance', function (req, res)
-{
-	var title_to_check = req.body.title;
-	console.log(nick);
-    client = mysql.createConnection(sqlInfo);
-    client.query("select title from books where nick='"+ title_to_check+"';",function (err,rows)
     {
 		console.log(rows);
 		if(err)

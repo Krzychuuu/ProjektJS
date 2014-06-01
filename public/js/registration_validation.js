@@ -4,6 +4,7 @@ $(document).ready(function()
 	{
 		$('.error').empty();
 		console.log("Validating registration form:");
+		var Regex = /[^0-9]+/g;
 		var nick = $("#nick").val(),
 		password = $("#password").val();
 		pw_confirm = $("#confirm_password").val();
@@ -12,20 +13,10 @@ $(document).ready(function()
 			$('#error_message').html("Pola nie mogą być puste.");
 			event.preventDefault();
 		}
-		else
-		{
-			validate(event,[nick,password,pw_confirm]);
-		}
-	});
-
-	 var validate = function (event,data)
-	 {
-		var Regex = /[^0-9]+/g;
-		var ErrorOccured = false;
-		if(!Regex.test(data[0]))
+		if(!Regex.test(nick))
 		{
 			$('#error_message').html("Nick nie może zaczynać się od cyfry.");
-			ErrorOccured = true;
+			event.preventDefault();
 			console.log("Nick zaczyna sie od cyfry.");
 		}
 		$.ajax(
@@ -41,30 +32,20 @@ $(document).ready(function()
 					if(response)
 					{
 						$('#error_message').html('Nick zajęty.');
-						ErrorOccured = true;
+						event.preventDefault();
 					}
 				}
 			});
-        if(data[2]!==data[1])
+		if(password !== pw_confirm)
         {
-			ErrorOccured = true;
+			event.preventDefault();
 			$('#error_message').html("Hasła się nie zgadzają.");
 			console.log("Hasła się nie zgadzają.");
 		}
-		
-		if(ErrorOccured)
-		{
-			event.preventDefault();
-			console.log("Errory, nie mogę dodać.");
-		}
-		else
-		{
-			console.log("Dodaję.");
-			alert("Dodano użytkownika: "+nick_to_check);
-		}
-	 };
+		console.log("Dodaję.");
+		alert("Dodano użytkownika: "+nick_to_check);
+	});
 });
-
 
 
 
