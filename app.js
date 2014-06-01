@@ -34,7 +34,7 @@ app.use(express.session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static('public'));
-
+app.use(express.json());
 
 ///////////////////////////////////////////
 //     logowanie - passport
@@ -141,6 +141,7 @@ app.get('/logged', function (req, res)
   }
 });
 
+
 ///////////////////////////////////////////
 //     rejestracja usera
 app.get('/signup', function (req, res)
@@ -168,23 +169,56 @@ var registerUser = function(data)
 	    }
   	});
 };
+///////////////////////////////////////////
+//     dodawanie książki
+app.get('/add_book', function (req, res)
+{
+	if(req.user && req.user.admin === 'admin')
+	{
+		return res.redirect('add_book.html');
+	}
+	else
+	{
+    	return res.redirect('/login');
+	}
+});
+
+app.post('/add_book', function (req, res)
+{
+	var data = req.body;
+	addBook(data);
+	return res.redirect('/');
+});
+
+var addBook = function(data)
+{
+    client = mysql.createConnection(sqlInfo);
+   	var sql = client.query('INSERT INTO books SET ? ;',data,function (err,rows)
+    {
+		console.log("book added");
+	    if(err)
+	    {
+	    	console.log(err);           
+	    }
+  	});
+};
 
 ///////////////////////////////////////////
 //     mysql validation
 
 app.post('/user_existance', function (req, res)
 {
-	var nick = req.body.nick;
+	var nick_to_check = req.body.nick;
 	console.log(nick);
     client = mysql.createConnection(sqlInfo);
-    client.query("select nick from users where nick='"+nick+"';",function (err,rows)
+    client.query("select nick from users where nick='"+nick_to_check+"';",function (err,rows)
     {
 		console.log(rows);
 		if(err)
 		{
 			console.log(err);           
 		}
-		if(rows)
+		if(rows) 
 		{
 			if(rows[0])
 			{
@@ -198,7 +232,37 @@ app.post('/user_existance', function (req, res)
 		else
 		{
 			console.log("not found in db");
-		   return res.send(false);  
+			return res.send(false);  
+		}
+	});
+});
+app.post('/book_title_existance', function (req, res)
+{
+	var title_to_check = req.body.title;
+	console.log(nick);
+    client = mysql.createConnection(sqlInfo);
+    client.query("select title from books where nick='"+ title_to_check+"';",function (err,rows)
+    {
+		console.log(rows);
+		if(err)
+		{
+			console.log(err);           
+		}
+		if(rows) 
+		{
+			if(rows[0])
+			{
+		    	return res.send(true);  
+		  	}
+		  	else
+		  	{
+		    	return res.send(false);  
+		  	}
+		}
+		else
+		{
+			console.log("not found in db");
+			return res.send(false);  
 		}
 	});
 });

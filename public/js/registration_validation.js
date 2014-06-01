@@ -28,15 +28,13 @@ $(document).ready(function()
 			ErrorOccured = true;
 			console.log("Nick zaczyna sie od cyfry.");
 		}
-		var nick_to_check = $('#nick').val();
-		console.log("Nick do sprawdzenia: "+nick_to_check);
 		$.ajax(
 			{
 				type: "POST",
 				url: "/user_existance",
 				dataType: "json",
 				contentType: "application/json",
-				data: JSON.stringify({nick: nick_to_check}),
+				data: JSON.stringify({nick: nick}),
 				async: false, 
 				success: function (response)
 				{             
@@ -62,7 +60,7 @@ $(document).ready(function()
 		else
 		{
 			console.log("Dodaję.");
-			alert("Dodano");
+			alert("Dodano użytkownika: "+nick_to_check);
 		}
 	 };
 });
