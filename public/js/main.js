@@ -1,4 +1,4 @@
-$(document).ready(function () {	
+$(document).ready(function () {
 	$.getJSON("/show_username", function(data)
 	{
 		$('#username_place').html("Zalogowano jako: "+data.username);
