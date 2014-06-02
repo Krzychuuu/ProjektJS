@@ -55,6 +55,7 @@ passport.use(new LocalStrategy(function (username, password, done)
 	client.query("select nick,admin from users where nick='"+username+"' AND password='"+password+"';",function (err,rows)
 	{
 		var user;
+		console.log("loguję:");
 		console.log(rows);
 		if(typeof rows !== 'undefined')
 		{
@@ -145,7 +146,11 @@ app.get('/logged', function (req, res)
      return res.redirect('logged.html');
   }
 });
-
+app.get('/show_username', function (req, res)
+{
+	console.log(req.user.username);
+	return res.send({username: req.user.username});
+});
 app.get('/book_list_all', function (req, res) {
     client = mysql.createConnection(sqlInfo);
     client.query('SELECT title,author,description,status FROM books ;',function (err,rows){

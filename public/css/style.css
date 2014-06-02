@@ -31,6 +31,7 @@ body {
   text-align: right;
   border-bottom: 2px black solid;
   padding-right: 5px;
+  height: 1px;
 }
 .booklist_title_tr {
   text-align: center;
