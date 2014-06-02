@@ -149,7 +149,16 @@ app.get('/logged', function (req, res)
 
 app.get('/book_list_avaible', function (req, res) {
     client = mysql.createConnection(sqlInfo);
-    client.query('SELECT title,author,description FROM books ;',function (err,rows){
+    client.query('SELECT title,author,description FROM books WHERE status ="not";',function (err,rows){
+    if(err){
+      console.log(err);           
+    }
+       return res.send(rows);  
+    });
+});
+app.get('/book_list_rented', function (req, res) {
+    client = mysql.createConnection(sqlInfo);
+    client.query('SELECT title,author,description FROM books WHERE status ="yes";',function (err,rows){
     if(err){
       console.log(err);           
     }
