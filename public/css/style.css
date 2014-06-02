@@ -54,6 +54,29 @@ body {
   text-align: center;
   border-bottom: 2px black solid;
 }
+.lended_admin {
+  border: 1px solid black;
+  width: 50%;
+}
+.lended_admin_username {
+  text-align: center;
+  font-weight: bold;
+}
+.lended_admin_username td {
+  border: 1px solid black;
+  background: darkgray;
+}
+.action {
+  border: none;
+  background: none;
+}
+.lended_admin_book td {
+  width: 50%;
+  text-align: center;
+  border: 1px dotted black;
+  background: lightgray;
+  vertical-align: middle;
+}
 A {
   text-decoration: none;
   color: #ffffff;

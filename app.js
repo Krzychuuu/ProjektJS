@@ -160,7 +160,26 @@ app.get('/book_list_all', function (req, res) {
        return res.send(rows);  
     });
 });
-    
+app.get('/show_lended_admin_userlist', function (req, res) {
+	client1 = mysql.createConnection(sqlInfo);
+	client1.query('SELECT DISTINCT user FROM lended ;',function (err,rows)
+		{
+		if(err){
+		console.log(err);           
+		}
+		return res.send(rows);  
+	});
+});
+app.get('/show_lended_admin_booklist_user', function (req, res) {
+	client1 = mysql.createConnection(sqlInfo);
+	client1.query('SELECT user,title,author FROM lended ;',function (err,rows)
+		{
+		if(err){
+		console.log(err);           
+		}
+		return res.send(rows);  
+	});
+});
 app.get('/book_list_avaible', function (req, res) {
     client = mysql.createConnection(sqlInfo);
     client.query('SELECT title,author,description FROM books WHERE status ="not";',function (err,rows){
