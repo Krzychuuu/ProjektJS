@@ -46,7 +46,7 @@ $(document).ready(function()
 		if(!errorOccured)
 		{
 			console.log("Dodaję.");
-			alert("Dodano użytkownika: "+nick_to_check);
+			alert("Dodano użytkownika: "+nick+" Możesz się zalogować.");
 		}
 		else
 		{

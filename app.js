@@ -191,7 +191,6 @@ app.get('/rented_book_list', function (req, res) {
        return res.send(rows);  
     });
 });
-
 app.get('/book_list_avaible', function (req, res) {
     client = mysql.createConnection(sqlInfo);
     client.query('SELECT title,author,description FROM books WHERE status ="not";',function (err,rows){
@@ -211,7 +210,52 @@ app.get('/book_list_rented', function (req, res) {
        return res.send(rows);  
     });
 });
+///////////////////////////////////////////
+//     zwrot książki
 
+app.post('/return', function (req, res)
+{
+	var rented_title = req.body.hidden_title;
+	var rented_author = req.body.hidden_author;
+	console.log("trying to return: "+rented_title+", "+rented_author);
+	client = mysql.createConnection(sqlInfo);
+   	var sql = client.query('UPDATE books SET status ="not" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
+   	var to_return = {
+   		user: req.user.username,
+   		title: rented_title,
+   		author: rented_author
+   		};
+   	var sql1 = client.query('DELETE FROM lended WHERE user = "'+req.user.username+'" AND title = "'+rented_title+'" AND author = "'+rented_author+'" ;', function (err,rows)
+   	{
+   		console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
+	    if(err)
+	    {
+	    	console.log(err);           
+	    }
+   	});
+	return res.redirect('/');
+});
+///////////////////////////////////////////
+//     zwrot książki przez admina
+
+app.post('/admin_return', function (req, res)
+{
+	var rented_title = req.body.hidden_title;
+	var rented_author = req.body.hidden_author;
+	var renting_user = req.body.hidden_user;
+	console.log("trying to return: "+rented_title+", "+rented_author);
+	client = mysql.createConnection(sqlInfo);
+   	var sql = client.query('UPDATE books SET status ="not" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
+   	var sql1 = client.query('DELETE FROM lended WHERE user = "'+renting_user+'" AND title = "'+rented_title+'" AND author = "'+rented_author+'" ;', function (err,rows)
+   	{
+   		console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
+	    if(err)
+	    {
+	    	console.log(err);           
+	    }
+   	});
+	return res.redirect('/');
+});
 ///////////////////////////////////////////
 //     wypożyczenie książki
 
