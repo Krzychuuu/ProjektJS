@@ -17,13 +17,19 @@ body {
 .book_description_hide_show_tr {
   font-weight: bold;
   font-family: arial;
+  padding-left: 5px;
+}
+.book_description_admin td {
+  padding-left: 5px;
+  font-weight: bold;
+  font-family: arial;
 }
 .book_description_hide_show_tr td {
   padding-left: 5px;
 }
-.rent_button {
+.rent_button td {
   text-align: right;
-  border-bottom: 1px black solid;
+  border-bottom: 2px black solid;
   padding-right: 5px;
 }
 .booklist_title_tr {
@@ -41,6 +47,11 @@ body {
   padding: 5px;
   padding-left: 10px;
   font-family: tahoma;
+}
+.book_status_td {
+  background: pink;
+  text-align: center;
+  border-bottom: 2px black solid;
 }
 A {
   text-decoration: none;

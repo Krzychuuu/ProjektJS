@@ -45,7 +45,7 @@
 	  		<h2>Witaj w wypożyczalni książek online.</h2><br>
 	  	<h4>Zarejestruj się bądź zaloguj by móc z niej korzystać.</h4><br>
 	  				<h3>Panel logowania</h3>
-	  				<form action="/login" method="post">
+	  				<!-- <form action="/login" method="post">
 	  				<table border="0" width="1" cellspacing="0" cellpadding="0" height="1">
 	<tr>
 		<td><img border="0" src="img/menubuttons/left-top3.jpg" width="7" height="6"></td>
@@ -79,7 +79,14 @@
 			
 				    				
     				<input id="send_login" type="submit" value="Zaloguj"/>
-			</form>
+			</form> -->
+				<form action="/login" method="post">
+	  				<label>Użytkownik:</label><br/>
+					<input type="text" id="username" name="username"/><br/>
+					<label>Hasło:</label><br/>
+    				<input type="password" id="password" name="password"/><br/>				    				
+    				<input id="send_login" type="submit" value="Zaloguj"/>
+				</form>
 			<br>
 			<p class="error" id="error_message"></p>
 	  </div>

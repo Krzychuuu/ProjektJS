@@ -146,7 +146,16 @@ app.get('/logged', function (req, res)
   }
 });
 
-
+app.get('/book_list_all', function (req, res) {
+    client = mysql.createConnection(sqlInfo);
+    client.query('SELECT title,author,description,status FROM books ;',function (err,rows){
+    if(err){
+      console.log(err);           
+    }
+       return res.send(rows);  
+    });
+});
+    
 app.get('/book_list_avaible', function (req, res) {
     client = mysql.createConnection(sqlInfo);
     client.query('SELECT title,author,description FROM books WHERE status ="not";',function (err,rows){
@@ -164,6 +173,19 @@ app.get('/book_list_rented', function (req, res) {
     }
        return res.send(rows);  
     });
+});
+
+///////////////////////////////////////////
+//     wypożyczenie książki
+
+app.post('/rent', function (req, res)
+{
+	var rented_title = req.body.hidden_title;
+	var rented_author = req.body.hidden_author;
+	console.log(rented_title, rented_author);
+	client = mysql.createConnection(sqlInfo);
+   	var sql = client.query('UPDATE books SET status ="yes" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
+	return res.redirect('/');
 });
 
 ///////////////////////////////////////////
