@@ -235,7 +235,7 @@ app.post('/rent', function (req, res)
 	    	console.log(err);           
 	    }
    	});
-	
+	return res.redirect('/');
 });
 
 ///////////////////////////////////////////

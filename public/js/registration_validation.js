@@ -3,6 +3,7 @@ $(document).ready(function()
 	$('#confirm_registration').click(function(event) 
 	{
 		$('.error').empty();
+		var errorOccured = false;
 		console.log("Validating registration form:");
 		var Regex = /[^0-9]+/g;
 		var nick = $("#nick").val(),
@@ -11,12 +12,12 @@ $(document).ready(function()
 		if(nick.length === 0 || password.length === 0 || pw_confirm.length === 0)
 		{
 			$('#error_message').html("Pola nie mogą być puste.");
-			event.preventDefault();
+			errorOccured = true;
 		}
 		if(!Regex.test(nick))
 		{
 			$('#error_message').html("Nick nie może zaczynać się od cyfry.");
-			event.preventDefault();
+			errorOccured = true;
 			console.log("Nick zaczyna sie od cyfry.");
 		}
 		$.ajax(
@@ -32,18 +33,25 @@ $(document).ready(function()
 					if(response)
 					{
 						$('#error_message').html('Nick zajęty.');
-						event.preventDefault();
+						errorOccured = true;
 					}
 				}
 			});
 		if(password !== pw_confirm)
         {
-			event.preventDefault();
+			errorOccured = true;
 			$('#error_message').html("Hasła się nie zgadzają.");
 			console.log("Hasła się nie zgadzają.");
 		}
-		console.log("Dodaję.");
-		alert("Dodano użytkownika: "+nick_to_check);
+		if(!errorOccured)
+		{
+			console.log("Dodaję.");
+			alert("Dodano użytkownika: "+nick_to_check);
+		}
+		else
+		{
+			event.preventDefault();
+		}
 	});
 });
 
