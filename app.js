@@ -148,7 +148,7 @@ app.get('/logged', function (req, res)
 });
 app.get('/show_username', function (req, res)
 {
-	console.log(req.user.username);
+	console.log("aktualnie jako: "+req.user.username);
 	return res.send({username: req.user.username});
 });
 app.get('/book_list_all', function (req, res) {
@@ -180,6 +180,18 @@ app.get('/show_lended_admin_booklist_user', function (req, res) {
 		return res.send(rows);  
 	});
 });
+
+app.get('/rented_book_list', function (req, res) {
+    client = mysql.createConnection(sqlInfo);
+    console.log(req.user);
+    client.query('SELECT title,author FROM lended WHERE user ="'+req.user.username+'";',function (err,rows){
+    if(err){
+      console.log(err);           
+    }
+       return res.send(rows);  
+    });
+});
+
 app.get('/book_list_avaible', function (req, res) {
     client = mysql.createConnection(sqlInfo);
     client.query('SELECT title,author,description FROM books WHERE status ="not";',function (err,rows){
@@ -189,6 +201,7 @@ app.get('/book_list_avaible', function (req, res) {
        return res.send(rows);  
     });
 });
+
 app.get('/book_list_rented', function (req, res) {
     client = mysql.createConnection(sqlInfo);
     client.query('SELECT title,author,description FROM books WHERE status ="yes";',function (err,rows){
@@ -206,14 +219,28 @@ app.post('/rent', function (req, res)
 {
 	var rented_title = req.body.hidden_title;
 	var rented_author = req.body.hidden_author;
-	console.log(rented_title, rented_author);
+	console.log("trying to rent: "+rented_title+", "+rented_author);
 	client = mysql.createConnection(sqlInfo);
    	var sql = client.query('UPDATE books SET status ="yes" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
-	return res.redirect('/');
+   	var to_rent = {
+   		user: req.user.username,
+   		title: rented_title,
+   		author: rented_author
+   		};
+   	var sql1 = client.query('INSERT INTO lended SET ? ;', to_rent, function (err,rows)
+   	{
+   		console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
+	    if(err)
+	    {
+	    	console.log(err);           
+	    }
+   	});
+	
 });
 
 ///////////////////////////////////////////
 //     rejestracja usera
+
 app.get('/signup', function (req, res)
 {
 	return res.redirect('signup.html');
@@ -223,12 +250,6 @@ app.post('/register_user', function (req, res)
 {
 	var data = req.body;
 	delete data['confirm_password'];
-	registerUser(data);
-	return res.redirect('/');
-});
-
-var registerUser = function(data)
-{
     client = mysql.createConnection(sqlInfo);
    	var sql = client.query('INSERT INTO users SET ? ;',data,function (err,rows)
     {
@@ -238,9 +259,12 @@ var registerUser = function(data)
 	    	console.log(err);           
 	    }
   	});
-};
+	return res.redirect('/');
+});
+
 ///////////////////////////////////////////
 //     dodawanie książki
+
 app.get('/add_book', function (req, res)
 {
 	if(req.user && req.user.admin === 'admin')
