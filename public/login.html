@@ -3,99 +3,63 @@
 <head>
 <meta http-equiv="Content-Language" content="pl">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1250">
-<title>Wypożyczalnia książek</title>
-  <script src="/socket.io/socket.io.js"></script>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-  <script src="angular/angular.min.js"></script>
-<link rel="stylesheet" type="text/css" href="css/style.css">
 
-  <script src="js/login_validation.js"></script>
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<title>Wypożyczalnia książek</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+	<script type="text/javascript" src="angular/angular.min.js"></script>
+	<script type="text/javascript" src="js/login_validation.js"></script>
+	<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
 </head>
 
-<body background="img/bgpix.jpg" data-ng-app="czatApka">
-	  <div data-ng-controller="chatCtrlr">
-<nav class="navbar navbar-default" role="navigation">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">Wypożyczalnia Książek</a>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-       <ul class="nav navbar-nav navbar-right">
-       	<li><a href="/contact">Kontakt</a></li>
-          <li><a href="/login">Zaloguj</a></li>
-          <li><a href="/signup">Zarejestruj się</a></li>
-       </ul>
-      
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-	  <div class="jumbotron">
-	  	<div class="container">
-	  	
-	  		<h2>Witaj w wypożyczalni książek online.</h2><br>
-	  	<h4>Zarejestruj się bądź zaloguj by móc z niej korzystać.</h4><br>
-	  				<h3>Panel logowania</h3>
-	  				<!-- <form action="/login" method="post">
-	  				<table border="0" width="1" cellspacing="0" cellpadding="0" height="1">
-	<tr>
-		<td><img border="0" src="img/menubuttons/left-top3.jpg" width="7" height="6"></td>
-		<td background="img/menubuttons/top3.jpg"></td>
-		<td><img border="0" src="img/menubuttons/right-top3.jpg" width="8" height="6"></td>
-	</tr>
-	<tr>
-		<td background="img/menubuttons/left3.jpg"></td>
-		<td><label>Użytkownik:</label><br/>
-					<input type="text" id="username" name="username"/><br/>
-</td>
-		<td background="img/menubuttons/right3.jpg"></td>
-	</tr>
-	<tr>
-		<td><img border="0" src="img/menubuttons/left-mid3.jpg" width="7" height="8"></td>
-		<td background="img/menubuttons/middle3.jpg"></td>
-		<td><img border="0" src="img/menubuttons/right-mid3.jpg" width="8" height="8"></td>
-	</tr>
-	<tr>
-		<td background="img/menubuttons/left3.jpg"></td>
-		<td><label>Hasło:</label><br/>
-    				<input type="password" id="password" name="password"/><br/></td>
-		<td background="img/menubuttons/right3.jpg"></td>
-	</tr>
-	<tr>
-		<td><img border="0" src="img/menubuttons/left-bottom3.jpg" width="7" height="7"></td>
-		<td background="img/menubuttons/bottom3.jpg"></td>
-		<td><img border="0" src="img/menubuttons/right-bottom3.jpg" width="8" height="7"></td>
-	</tr>
-</table>
+<body>
+	
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">Wypożyczalnia Książek</a>
+			</div>
 			
-				    				
-    				<input id="send_login" type="submit" value="Zaloguj"/>
-			</form> -->
-				<form action="/login" method="post">
-	  				<label>Użytkownik:</label><br/>
-					<input type="text" id="username" name="username"/><br/>
-					<label>Hasło:</label><br/>
-    				<input type="password" id="password" name="password"/><br/>				    				
-    				<input id="send_login" type="submit" value="Zaloguj"/>
-				</form>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/contact">Kontakt</a></li>
+					<li><a href="/login">Zaloguj</a></li>
+					<li><a href="/signup">Zarejestruj się</a></li>
+				</ul>  
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+
+	<div class="jumbotron">
+		<div class="container">		
+			<h2>Witaj w wypożyczalni książek online.</h2><br>
+			<h4>Zarejestruj się bądź zaloguj by móc z niej korzystać.</h4><br>
+			<h3>Panel logowania</h3>		
+			<form action="/login" method="post">
+				<label>Użytkownik:</label><br/>
+				<input type="text" id="username" name="username"/><br/>
+				<label>Hasło:</label><br/>
+				<input type="password" id="password" name="password"/><br/>				    				
+				<input id="send_login" type="submit" value="Zaloguj"/>
+			</form>
 			<br>
 			<p class="error" id="error_message"></p>
-	  </div>
-	  </div>
-	  <div id="footer">
-	  	<div class="container"><p><b><i>(C)opyright by: Krzysztof Ochędzan.</i></b></p></div>
-	  </div>
-  </div>
+		</div>
+	</div>
+  
+  <div id="footer">(C)opyright by: Krzysztof Ochędzan.</div>
 
 </body>
 

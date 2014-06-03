@@ -1,3 +1,6 @@
+/*jshint globalstrict: true, devel: true, browser: true, jquery: true */
+/* global io */
+
 var socket = io.connect('http://' + location.host);
 $(document).ready(function () {
 	var actual_user;
@@ -9,10 +12,10 @@ $(document).ready(function () {
 		});	
 	}
 	socket.on('connect', function () {
-	    console.log("socket dziala");
-	    socket.emit('new_user_logged', actual_user);
+    console.log("socket dziala");
+    socket.emit('new_user_logged', actual_user);
 	});
-	$('#give_book_list_nonadmin').click(function(event)
+	$('#give_book_list_nonadmin').click(function()
 	{
 		$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
 		$.getJSON("/book_list_avaible", function(data)
@@ -27,7 +30,7 @@ $(document).ready(function () {
 			});	
 			books_rented();
 	});
-	$('#give_rented_books_list_nonadmin').click(function(event)
+	$('#give_rented_books_list_nonadmin').click(function()
 	{
 		$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
 		$.getJSON("/rented_book_list", function(data)
@@ -40,7 +43,7 @@ $(document).ready(function () {
 				}
 		});	
 	});
-	$('#give_rented_books_list_to_return_nonadmin').click(function(event)
+	$('#give_rented_books_list_to_return_nonadmin').click(function()
 	{
 		$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
 		$.getJSON("/rented_book_list", function(data)
@@ -53,7 +56,7 @@ $(document).ready(function () {
 				}
 		});	
 	});
-	$('#logout').click(function(event)
+	$('#logout').click(function()
 	{
 		if (confirm("Pewien?")){
 			socket.emit('user_logout', actual_user);
@@ -62,18 +65,7 @@ $(document).ready(function () {
 		}
 	});
 });
-var get_books_for_user = function(tmp_username){
-	$.getJSON("/show_lended_admin_booklist_user", function(data)
-				{
-					for(var j = 0; j < data.length ; j++)
-					{
-						if(data[j].user == tmp_username){
-							$("#lended_admin_"+data[j].user).append("<tr class='lended_admin_book'><td>"+data[j].title+"</td><td>"+data[j].author+"</td><td class='admin_return_td'><form action='/admin_return' method='post'><input type='hidden' value='"+data[j].title+"' id='hidden_title' name='hidden_title'/><input type='hidden' value='"+data[j].author+"' id='hidden_author' name='hidden_author'/><input type='hidden' value='"+data[j].user+"' id='hidden_user' name='hidden_user'/><input id='' type='submit' value='ZWROT'/></form></td></tr>");
-						}
-					}
-				});
-};
-	var booksDescribe = function()
+var booksDescribe = function()
 	{
 		console.log("funkcja");
 		$('.book_description_hide_show_tr').each(function()

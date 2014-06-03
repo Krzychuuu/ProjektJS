@@ -1,3 +1,6 @@
+/*jshint globalstrict: true, devel: true, browser: true, jquery: true */
+/* global io */
+
 var socket = io.connect('http://' + location.host);
 
 $(document).ready(function () {
@@ -11,9 +14,9 @@ $(document).ready(function () {
 	}
 	socket.on('connect', function () {
 		console.log("socket dziala");
-	    socket.emit('new_user_logged', actual_user);
+    socket.emit('new_user_logged', actual_user);
 	});
-	$('#give_book_list_admin').click(function(event)
+	$('#give_book_list_admin').click(function()
 	{
 		$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
 		$.getJSON("/book_list_all", function(data)
@@ -30,7 +33,7 @@ $(document).ready(function () {
 				}
 			});
 	});
-	$('#show_logged_users').click(function(event)
+	$('#show_logged_users').click(function()
 	{
 		socket.emit('socket_show_logged_users');
 		$(".jumbotron > .container").html("<ul id='logged_user_list'>Zalogowani użytkownicy:</ul>");
@@ -39,14 +42,14 @@ $(document).ready(function () {
 	{
 		if($('#logged_user_list').length > 0)
 		{
-		$("#logged_user_list > li").empty();
-		for (i=0;i<logged_users.length;i++){
-			$("#logged_user_list").append("<li>"+logged_users[i]+"</li>");
+      $("#logged_user_list > li").empty();
+      for (var i=0;i<logged_users.length;i++){
+        $("#logged_user_list").append("<li>"+logged_users[i]+"</li>");
+      }
 		}
-		};
 	});
 
-	$('#show_lended_admin').click(function(event)
+	$('#show_lended_admin').click(function()
 	{
 		$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
 		$.getJSON("/show_lended_admin_userlist", function(data)
@@ -63,54 +66,22 @@ $(document).ready(function () {
 		
 			
 	});
-
-	$('#logout').click(function(event)
+	$('#logout').click(function()
 	{
-		socket.emit('user_logout', actual_user);
-		$.get("/logout");
+		if (confirm("Pewien?")){
+			$.get("/logout");
+			$(location).attr('href','login.html');
+		}
 	});
 });
 var get_books_for_user = function(tmp_username){
 	$.getJSON("/show_lended_admin_booklist_user", function(data)
-				{
-					for(var j = 0; j < data.length ; j++)
-					{
-						if(data[j].user == tmp_username){
-							$("#lended_admin_"+data[j].user).append("<tr class='lended_admin_book'><td>"+data[j].title+"</td><td>"+data[j].author+"</td><td class='admin_return_td'><form action='/admin_return' method='post'><input type='hidden' value='"+data[j].title+"' id='hidden_title' name='hidden_title'/><input type='hidden' value='"+data[j].author+"' id='hidden_author' name='hidden_author'/><input type='hidden' value='"+data[j].user+"' id='hidden_user' name='hidden_user'/><input id='' type='submit' value='ZWROT'/></form></td></tr>");
-						}
-					}
-				});
-};
-	var booksDescribe = function()
 	{
-		console.log("funkcja");
-		$('.book_description_hide_show_tr').each(function()
+		for(var j = 0; j < data.length ; j++)
 		{
-			$(this).click(function()
-			{
-				$(this).next().css('background','white');	
-				if($(this).next().css('display') == 'table-row')
-				{
-					$(this).next().css('display','none');
-					$(this).css('background','lightgray');
-				}
-				else
-				{
-					$(this).next().css('display','table-row');  
-					$(this).css('background','darkgray');
-				}
-			});
-		});	 
-	};
-	var books_rented = function()
-	{
-		$.getJSON("/book_list_rented", function(data)
-		{
-			$(".jumbotron > .container").append("<br><h4>Książki wypożyczone:</h4><h5>(Naciśnij książkę by zobaczyć opis.)");
-			$(".jumbotron > .container").append("<table id='booklist2' class='booklist'><tbody><tr class='booklist_title_tr'><td>Tytuł</td><td>Autor</td></tr></tbody></table>");
-			for(var i = 0; i < data.length ; i++){
-				$("#booklist2").append("<tr class='book_description_hide_show_tr'><td>"+data[i].title+"</td><td>"+data[i].author+"</td></tr><tr style='display:none'><td class='book_description_td' colspan='2'>"+data[i].description+"</td></tr>");
+			if(data[j].user == tmp_username){
+				$("#lended_admin_"+data[j].user).append("<tr class='lended_admin_book'><td>"+data[j].title+"</td><td>"+data[j].author+"</td><td class='admin_return_td'><form action='/admin_return' method='post'><input type='hidden' value='"+data[j].title+"' id='hidden_title' name='hidden_title'/><input type='hidden' value='"+data[j].author+"' id='hidden_author' name='hidden_author'/><input type='hidden' value='"+data[j].user+"' id='hidden_user' name='hidden_user'/><input id='' type='submit' value='ZWROT'/></form></td></tr>");
 			}
-		booksDescribe();
-		});
-	};
+		}
+	});
+};

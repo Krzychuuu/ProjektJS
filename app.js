@@ -1,3 +1,5 @@
+/*jshint globalstrict: true, devel: true, browser: true, jquery: true */
+/*global require*/
 var http = require('http');
 
 var express = require('express');
@@ -25,10 +27,9 @@ var sqlInfo = {
 var sessionStore = new connect.session.MemoryStore();
 var sessionSecret = 'Sekrecik';
 var sessionKey = 'connect.sid';
-var server;
 
 var logged_users = [];
-
+var client;
 
 app.use(express.cookieParser());
 app.use(express.urlencoded());
@@ -94,29 +95,27 @@ app.use(express.static('public'));
 //     sockety
 
 io.sockets.on('connection', function (socket) {
-
-	socket.on('new_user_logged', function (username) {
-		var found = false;
+  
+  socket.on('new_user_logged', function (username) {
+    var found = false;
 		for(var j = 0; j < logged_users.length; j++)
-		{
-			if(logged_users[j]===username)
-			{
-				found=true;
-				break;
-			}
-		}
-        if(username === "admin" || found)
-	    {
-	    	
-	    }
-	    else
-	    {
-		    logged_users.push(username);
-		    logged_users.sort();
-		    socket.emit('logged users', ArrNoDupe(logged_users));
-	    }
-
-	});
+    {
+      if(logged_users[j]===username)
+      {
+        found=true;
+        break;
+      }
+    }
+    if(username === "admin" || found)
+    {}
+    else
+    {
+      logged_users.push(username);
+      logged_users.sort();
+      socket.emit('logged users', ArrNoDupe(logged_users));
+    }
+    
+  });
 	socket.on('socket_show_logged_users', function()
 	{
 		socket.emit('logged users', ArrNoDupe(logged_users));
@@ -124,8 +123,8 @@ io.sockets.on('connection', function (socket) {
 	socket.on('user_logout', function(username)
 	{
 		logged_users.splice(logged_users.indexOf(username),1);
-	    logged_users.sort();
-	    socket.emit('logged users', ArrNoDupe(logged_users));
+    logged_users.sort();
+    socket.emit('logged users', ArrNoDupe(logged_users));
 	});
 
 });
@@ -135,11 +134,9 @@ var ArrNoDupe = function(a) {
         temp[a[i]] = true;
     var r = [];
     for (var k in temp)
-        r.push(k);
+      r.push(k);
     return r;
 };
-var ar = [10,7,8,3,3,3,4,7,6];
-var ar2 = ArrNoDupe(ar);
 ///////////////////////////////////////////
 //     przekierowania
 app.post('/login', passport.authenticate('local',
@@ -157,11 +154,6 @@ app.get('/login', function (req, res)
 app.get('/fail', function (req, res)
 {
 	return res.redirect('/login');
-});
-app.disable('admin.html');
-app.get('/admin.html', function (req, res)
-{
-	return res.redirect('/');
 });
 
 app.get('/', function(req, res)
@@ -182,7 +174,7 @@ app.get('/logout', function (req, res)
 {
 	console.log('Zakończenie sesji');
 	req.logout();
-	client.end(function(err)
+	client.end(function()
 	{
 		console.log("Rozłączono z mysql");
 	});
@@ -210,26 +202,26 @@ app.get('/show_username', function (req, res)
 app.get('/book_list_all', function (req, res) {
 	if(req.user && req.user.admin === 'admin')
 	{
-	    client = mysql.createConnection(sqlInfo);
-	    if(req.user)
-	    client.query('SELECT title,author,description,status FROM books ;',function (err,rows){
-	    if(err){
-	      console.log(err);           
-	    }
-	       return res.send(rows);  
-	    });
-	}
+    client = mysql.createConnection(sqlInfo);
+    if(req.user)
+      client.query('SELECT title,author,description,status FROM books ;',function (err,rows){
+        if(err){
+          console.log(err);           
+        }
+        return res.send(rows);  
+      });
+  }
 	else
 	{
-		 return res.redirect('/login');
+    return res.redirect('/login');
 	}
 
 });
 app.get('/show_lended_admin_userlist', function (req, res) {
 	if(req.user && req.user.admin === 'admin')
 	{
-		client1 = mysql.createConnection(sqlInfo);
-		client1.query('SELECT DISTINCT user FROM lended ;',function (err,rows)
+		client = mysql.createConnection(sqlInfo);
+		client.query('SELECT DISTINCT user FROM lended ;',function (err,rows)
 			{
 			if(err){
 			console.log(err);           
@@ -239,13 +231,13 @@ app.get('/show_lended_admin_userlist', function (req, res) {
 	}
 	else
 	{
-		 return res.redirect("/login");
+    return res.redirect("/login");
 	}
 
 });
 app.get('/show_lended_admin_booklist_user', function (req, res) {
-	client1 = mysql.createConnection(sqlInfo);
-	client1.query('SELECT user,title,author FROM lended ;',function (err,rows)
+	client = mysql.createConnection(sqlInfo);
+	client.query('SELECT user,title,author FROM lended ;',function (err,rows)
 		{
 		if(err){
 		console.log(err);           
@@ -257,35 +249,35 @@ app.get('/show_lended_admin_booklist_user', function (req, res) {
 app.get('/rented_book_list', function (req, res) {
     if(req.user)
     {
-    		    client = mysql.createConnection(sqlInfo);
-	    console.log(req.user);
-	    client.query('SELECT title,author FROM lended WHERE user ="'+req.user.username+'";',function (err,rows){
-	    if(err){
-	      console.log(err);           
-	    }
-	       return res.send(rows);  
-	    });
+      client = mysql.createConnection(sqlInfo);
+      console.log(req.user);
+      client.query('SELECT title,author FROM lended WHERE user ="'+req.user.username+'";',function (err,rows){
+        if(err){
+          console.log(err);           
+        }
+        return res.send(rows);  
+      });
     }
-    else
-    {
-    	return res.redirect("/login");
-    }
+  else
+  {
+    return res.redirect("/login");
+  }
 
 });
 app.get('/book_list_avaible', function (req, res) {
     if(req.user)
     {
-	    client = mysql.createConnection(sqlInfo);
-	    client.query('SELECT title,author,description FROM books WHERE status ="not";',function (err,rows){
-	    if(err){
-	      console.log(err);           
-	    }
-	       return res.send(rows);  
-	    });
+      client = mysql.createConnection(sqlInfo);
+      client.query('SELECT title,author,description FROM books WHERE status ="not";',function (err,rows){
+        if(err){
+          console.log(err);
+        }
+        return res.send(rows);  
+      });
     }
-    else
-    {
-    	return res.redirect("/login");
+  else
+  {
+    return res.redirect("/login");
     }
 
 });
@@ -294,14 +286,14 @@ app.get('/book_list_rented', function (req, res) {
     if(req.user)
     {
 		client = mysql.createConnection(sqlInfo);
-	    client.query('SELECT title,author,description FROM books WHERE status ="yes";',function (err,rows){
-	    if(err){
-	      console.log(err);           
-	    }
-	       return res.send(rows);  
-	    });
+      client.query('SELECT title,author,description FROM books WHERE status ="yes";',function (err,rows){
+        if(err){
+          console.log(err);           
+        }
+        return res.send(rows);  
+      });
     }
-	else
+  else
 	{
 		return res.redirect("/login");
 	}
@@ -315,42 +307,37 @@ app.post('/return', function (req, res)
 	var rented_author = req.body.hidden_author;
 	console.log("trying to return: "+rented_title+", "+rented_author);
 	client = mysql.createConnection(sqlInfo);
-   	var sql = client.query('UPDATE books SET status ="not" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
-   	var to_return = {
-   		user: req.user.username,
-   		title: rented_title,
-   		author: rented_author
-   		};
-   	var sql1 = client.query('DELETE FROM lended WHERE user = "'+req.user.username+'" AND title = "'+rented_title+'" AND author = "'+rented_author+'" ;', function (err,rows)
-   	{
-   		console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
-	    if(err)
-	    {
-	    	console.log(err);           
-	    }
-   	});
-	return res.redirect('/');
+  client.query('UPDATE books SET status ="not" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
+  client.query('DELETE FROM lended WHERE user = "'+req.user.username+'" AND title = "'+rented_title+'" AND author = "'+rented_author+'" ;', function (err,rows)
+                          {
+                            console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
+                            if(err)
+                            {
+                              console.log(err);           
+                            }
+                          });
+  return res.redirect('/');
 });
-///////////////////////////////////////////
-//     zwrot książki przez admina
-
-app.post('/admin_return', function (req, res)
+  ///////////////////////////////////////////
+  //     zwrot książki przez admina
+  
+  app.post('/admin_return', function (req, res)
 {
 	var rented_title = req.body.hidden_title;
 	var rented_author = req.body.hidden_author;
 	var renting_user = req.body.hidden_user;
 	console.log("trying to return: "+rented_title+", "+rented_author);
 	client = mysql.createConnection(sqlInfo);
-   	var sql = client.query('UPDATE books SET status ="not" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
-   	var sql1 = client.query('DELETE FROM lended WHERE user = "'+renting_user+'" AND title = "'+rented_title+'" AND author = "'+rented_author+'" ;', function (err,rows)
-   	{
-   		console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
-	    if(err)
-	    {
-	    	console.log(err);           
-	    }
-   	});
-	return res.redirect('/');
+  client.query('UPDATE books SET status ="not" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
+ client.query('DELETE FROM lended WHERE user = "'+renting_user+'" AND title = "'+rented_title+'" AND author = "'+rented_author+'" ;', function (err,rows)
+                          {
+                            console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
+                            if(err)
+                            {
+                              console.log(err);           
+                            }
+                          });
+  return res.redirect('/');
 });
 ///////////////////////////////////////////
 //     wypożyczenie książki
@@ -361,21 +348,21 @@ app.post('/rent', function (req, res)
 	var rented_author = req.body.hidden_author;
 	console.log("trying to rent: "+rented_title+", "+rented_author);
 	client = mysql.createConnection(sqlInfo);
-   	var sql = client.query('UPDATE books SET status ="yes" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
-   	var to_rent = {
-   		user: req.user.username,
-   		title: rented_title,
-   		author: rented_author
-   		};
-   	var sql1 = client.query('INSERT INTO lended SET ? ;', to_rent, function (err,rows)
-   	{
-   		console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
-	    if(err)
-	    {
-	    	console.log(err);           
-	    }
-   	});
-	return res.redirect('/');
+	client.query('UPDATE books SET status ="yes" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
+  var to_rent = {
+    user: req.user.username,
+    title: rented_title,
+    author: rented_author
+  };
+  client.query('INSERT INTO lended SET ? ;', to_rent, function (err,rows)
+                          {
+                            console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
+                            if(err)
+                            {
+                              console.log(err);           
+                            }
+                          });
+  return res.redirect('/');
 });
 
 ///////////////////////////////////////////
@@ -389,17 +376,17 @@ app.get('/signup', function (req, res)
 app.post('/register_user', function (req, res)
 {
 	var data = req.body;
-	delete data['confirm_password'];
+	delete data.confirm_password;
     client = mysql.createConnection(sqlInfo);
-   	var sql = client.query('INSERT INTO users SET ? ;',data,function (err,rows)
-    {
-		console.log("registered");
-	    if(err)
-	    {
-	    	console.log(err);           
-	    }
-  	});
-	return res.redirect('/');
+ client.query('INSERT INTO users SET ? ;',data,function (err,rows)
+                         {
+                           console.log("registered");
+                           if(err)
+                           {
+                             console.log(err);
+                           }
+                         });
+  return res.redirect('/');
 });
 
 ///////////////////////////////////////////
@@ -413,7 +400,7 @@ app.get('/add_book', function (req, res)
 	}
 	else
 	{
-    	return res.redirect('/login');
+    return res.redirect('/login');
 	}
 });
 
@@ -421,15 +408,15 @@ app.post('/add_book', function (req, res)
 {
 	var data = req.body;
     client = mysql.createConnection(sqlInfo);
-   	var sql = client.query('INSERT INTO books SET ? ;',data,function (err,rows)
-    {
-		console.log("book added");
-	    if(err)
-	    {
-	    	console.log(err);           
-	    }
-  	});
-	return res.redirect('/');
+  client.query('INSERT INTO books SET ? ;',data,function (err,rows)
+                         {
+                           console.log("book added");
+                           if(err)
+                           {
+                             console.log(err);           
+                           }
+                         });
+  return res.redirect('/');
 });
 
 ///////////////////////////////////////////
@@ -450,13 +437,13 @@ app.post('/user_existance', function (req, res)
 		{
 			if(rows[0])
 			{
-		    	return res.send(true);  
-		  	}
-		  	else
-		  	{
-		    	return res.send(false);  
-		  	}
-		}
+        return res.send(true);  
+      }
+      else
+      {
+        return res.send(false);  
+      }
+    }
 		else
 		{
 			console.log("not found in db");
@@ -471,9 +458,9 @@ app.get('/password_existance', function (req, res)
     client = mysql.createConnection(sqlInfo);
     client.query("select nick,password from users WHERE nick='"+nick_to_check+"' AND password = '"+pass_to_check+"';",function (err,rows)
     {
-	    if(err){
-	      console.log(err);           
-	    }
-	       return res.send(''+rows.length);  
-	    });
+      if(err){
+        console.log(err);           
+      }
+      return res.send(''+rows.length);  
+    });
 });

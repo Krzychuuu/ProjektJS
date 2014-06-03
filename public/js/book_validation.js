@@ -1,3 +1,5 @@
+/*jshint globalstrict: true, devel: true, browser: true, jquery: true */
+
 $(document).ready(function()
 {
 	$('#confirm_add_book').click(function(event) 
@@ -18,7 +20,3 @@ $(document).ready(function()
 		}
 	});
 });
-
-
-
-
