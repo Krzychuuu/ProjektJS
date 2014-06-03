@@ -8,7 +8,11 @@ var connect = require('connect');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
-var url = require('url');
+var socketIo = require('socket.io');
+var passportSocketIo = require('passport.socketio');
+
+var server = app.listen(3000);
+var io = require('socket.io').listen(server);
 
 var mysql = require('mysql');
 var sqlInfo = {
@@ -22,7 +26,9 @@ var sessionStore = new connect.session.MemoryStore();
 var sessionSecret = 'Sekrecik';
 var sessionKey = 'connect.sid';
 var server;
-var sio;
+
+var logged_users = [];
+
 
 app.use(express.cookieParser());
 app.use(express.urlencoded());
@@ -84,6 +90,56 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static('public'));
 
+///////////////////////////////////////////
+//     sockety
+
+io.sockets.on('connection', function (socket) {
+
+	socket.on('new_user_logged', function (username) {
+		var found = false;
+		for(var j = 0; j < logged_users.length; j++)
+		{
+			if(logged_users[j]===username)
+			{
+				found=true;
+				break;
+			}
+		}
+        if(username === "admin" || found)
+	    {
+	    	
+	    }
+	    else
+	    {
+		    logged_users.push(username);
+		    logged_users.sort();
+		    socket.emit('logged users', ArrNoDupe(logged_users));
+	    }
+
+	});
+	socket.on('socket_show_logged_users', function()
+	{
+		socket.emit('logged users', ArrNoDupe(logged_users));
+	});
+	socket.on('user_logout', function(username)
+	{
+		logged_users.splice(logged_users.indexOf(username),1);
+	    logged_users.sort();
+	    socket.emit('logged users', ArrNoDupe(logged_users));
+	});
+
+});
+var ArrNoDupe = function(a) {
+    var temp = {};
+    for (var i = 0; i < a.length; i++)
+        temp[a[i]] = true;
+    var r = [];
+    for (var k in temp)
+        r.push(k);
+    return r;
+};
+var ar = [10,7,8,3,3,3,4,7,6];
+var ar2 = ArrNoDupe(ar);
 ///////////////////////////////////////////
 //     przekierowania
 app.post('/login', passport.authenticate('local',
@@ -420,13 +476,4 @@ app.get('/password_existance', function (req, res)
 	    }
 	       return res.send(''+rows.length);  
 	    });
-});
-///////////////////////////////////////////
-//     serwer start
-
-server = http.createServer(app);
-
-server.listen(3000, function ()
-{
-    console.log('Serwer pod adresem http://localhost:3000/');
 });

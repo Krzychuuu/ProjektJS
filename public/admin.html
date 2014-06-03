@@ -1,17 +1,21 @@
 <html>
 
 <head>
+	
 <meta http-equiv="Content-Language" content="pl">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1250">
-<title>Wypożyczalnia książek</title>
-  <script src="/socket.io/socket.io.js"></script>
+
+	<title>Wypożyczalnia książek</title>
+    <script src="socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-  <script src="angular/angular.min.js"></script>
-  <script src="js/main.js"></script>
-<link rel="stylesheet" type="text/css" href="css/style.css">
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  	<script src="angular/angular.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script src="js/admin.js"></script>
+  	
 </head>
+
 <body background="img/bgpix.jpg" data-ng-app="czatApka">
 	  <div data-ng-controller="chatCtrlr">
 <nav class="navbar navbar-default" role="navigation">
@@ -33,10 +37,11 @@
         <li id="give_book_list_admin"><a>Pokaż Książki</a></li>
         <li><a href="add_book">Dodaj książkę</a></li>
         <li id="show_lended_admin"><a>Zarządzaj wypożyczeniami</a></li>
+        <li id="show_logged_users"><a>Zalogowani użytkownicy</a></li>
        </ul>
       <ul class="nav navbar-nav navbar-right">
       <li><p class="navbar-text" id="username_place">Zalogowano jako:</p></li>
-	  <li><a href="/logout">Wyloguj</a></li>
+	  <li class="logout"><a>Wyloguj</a></li>
 	  </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
