@@ -9,6 +9,7 @@ $(document).ready(function()
 		var title = $("#title").val();
 		var author = $("#author").val();
 		var description = $("#description").val();
+		
 		if(title.length === 0 || author.length === 0 || description.length === 0)
 		{
 			$('#error_message').html("Pola nie mogą być puste.");

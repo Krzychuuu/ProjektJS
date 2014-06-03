@@ -12,35 +12,35 @@ $(document).ready(function () {
 		});	
 	}
 	socket.on('connect', function () {
-    console.log("socket dziala");
-    socket.emit('new_user_logged', actual_user);
+	    console.log("socket dziala");
+	    socket.emit('new_user_logged', actual_user);
 	});
 	$('#give_book_list_nonadmin').click(function()
 	{
 		$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
 		$.getJSON("/book_list_avaible", function(data)
-			{
-				$(".jumbotron").html("<h4>Książki dostępne:</h4><h5>(Naciśnij książkę by zobaczyć opis.)");
-				$(".jumbotron").append("<table id='booklist1' class='booklist'><tbody><tr class='booklist_top_tr'><td>Tytuł</td><td>Autor</td></tr></tbody></table>");
-				for(var i = 0; i < data.length ; i++){
-					$("#booklist1").append("<tr class='book_description_hide_show_tr'><td>"+data[i].title+"</td><td>"+data[i].author+"</td></tr>");
-					$("#booklist1").append("<tr style='display:none'><td class='book_description_td' colspan='2'>"+data[i].description+"</td></tr>");
-					$("#booklist1").append("<tr class='rent_button'><td colspan='2'><form action='/rent' method='post'><input type='hidden' value='"+data[i].title+"' id='hidden_title' name='hidden_title'/><input type='hidden' value='"+data[i].author+"' id='hidden_author' name='hidden_author'/><input id='' type='submit' value='wypożycz'/></form></td></tr>");
-				}
-			});	
-			books_rented();
+		{
+			$(".jumbotron").html("<h4>Książki dostępne:</h4><h5>(Naciśnij książkę by zobaczyć opis.)");
+			$(".jumbotron").append("<table id='booklist1' class='booklist'><tbody><tr class='booklist_top_tr'><td>Tytuł</td><td>Autor</td></tr></tbody></table>");
+			for(var i = 0; i < data.length ; i++){
+				$("#booklist1").append("<tr class='book_description_hide_show_tr'><td>"+data[i].title+"</td><td>"+data[i].author+"</td></tr>");
+				$("#booklist1").append("<tr style='display:none'><td class='book_description_td' colspan='2'>"+data[i].description+"</td></tr>");
+				$("#booklist1").append("<tr class='rent_button'><td colspan='2'><form action='/rent' method='post'><input type='hidden' value='"+data[i].title+"' id='hidden_title' name='hidden_title'/><input type='hidden' value='"+data[i].author+"' id='hidden_author' name='hidden_author'/><input id='' type='submit' value='wypożycz'/></form></td></tr>");
+			}
+		});	
+		books_rented();
 	});
 	$('#give_rented_books_list_nonadmin').click(function()
 	{
 		$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
 		$.getJSON("/rented_book_list", function(data)
 		{
-				$(".jumbotron").html("<h4>Wypożyczone przez Ciebie książki:</h4>");
-				$(".jumbotron").append("<table id='booklist' class='booklist'><tbody><tr class='booklist_top_tr'><td>Tytuł</td><td>Autor</td></tr></tbody></table>");
-				for(var i = 0; i < data.length ; i++){
-					$("#booklist").append("<tr class='book_description_hide_show_tr'><td>"+data[i].title+"</td><td>"+data[i].author+"</td></tr>");
-					//$("#booklist").append("<tr class='rent_button'><td colspan='2'><form action='/rent' method='post'><input type='hidden' value='"+data[i].title+"' id='hidden_title' name='hidden_title'/><input type='hidden' value='"+data[i].author+"' id='hidden_author' name='hidden_author'/><input id='' type='submit' value='wypożycz'/></form></td></tr>");
-				}
+			$(".jumbotron").html("<h4>Wypożyczone przez Ciebie książki:</h4>");
+			$(".jumbotron").append("<table id='booklist' class='booklist'><tbody><tr class='booklist_top_tr'><td>Tytuł</td><td>Autor</td></tr></tbody></table>");
+			for(var i = 0; i < data.length ; i++){
+				$("#booklist").append("<tr class='book_description_hide_show_tr'><td>"+data[i].title+"</td><td>"+data[i].author+"</td></tr>");
+				//$("#booklist").append("<tr class='rent_button'><td colspan='2'><form action='/rent' method='post'><input type='hidden' value='"+data[i].title+"' id='hidden_title' name='hidden_title'/><input type='hidden' value='"+data[i].author+"' id='hidden_author' name='hidden_author'/><input id='' type='submit' value='wypożycz'/></form></td></tr>");
+			}
 		});	
 	});
 	$('#give_rented_books_list_to_return_nonadmin').click(function()
@@ -48,12 +48,12 @@ $(document).ready(function () {
 		$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
 		$.getJSON("/rented_book_list", function(data)
 		{
-				$(".jumbotron").html("<h4>Wypożyczone przez Ciebie książki:</h4>");
-				$(".jumbotron").append("<table id='booklist' class='booklist'><tbody><tr class='booklist_title_tr'><td>Tytuł</td><td>Autor</td></tr></tbody></table>");
-				for(var i = 0; i < data.length ; i++){
-					$("#booklist").append("<tr class='book_description_hide_show_tr'><td>"+data[i].title+"</td><td>"+data[i].author+"</td></tr>");
-					$("#booklist").append("<tr class='rent_button'><td colspan='2'><form action='/return' method='post'><input type='hidden' value='"+data[i].title+"' id='hidden_title' name='hidden_title'/><input type='hidden' value='"+data[i].author+"' id='hidden_author' name='hidden_author'/><input id='' type='submit' value='zwróć'/></form></td></tr>");
-				}
+			$(".jumbotron").html("<h4>Wypożyczone przez Ciebie książki:</h4>");
+			$(".jumbotron").append("<table id='booklist' class='booklist'><tbody><tr class='booklist_title_tr'><td>Tytuł</td><td>Autor</td></tr></tbody></table>");
+			for(var i = 0; i < data.length ; i++){
+				$("#booklist").append("<tr class='book_description_hide_show_tr'><td>"+data[i].title+"</td><td>"+data[i].author+"</td></tr>");
+				$("#booklist").append("<tr class='rent_button'><td colspan='2'><form action='/return' method='post'><input type='hidden' value='"+data[i].title+"' id='hidden_title' name='hidden_title'/><input type='hidden' value='"+data[i].author+"' id='hidden_author' name='hidden_author'/><input id='' type='submit' value='zwróć'/></form></td></tr>");
+			}
 		});	
 	});
 	$('#logout').click(function()
