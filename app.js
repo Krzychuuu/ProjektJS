@@ -16,7 +16,7 @@ var sqlInfo = {
   user: 'tswbd',
   password: 'tswbd',
   database: 'tsw'
-  }
+ };
 
 var sessionStore = new connect.session.MemoryStore();
 var sessionSecret = 'Sekrecik';
@@ -100,17 +100,12 @@ app.get('/login', function (req, res)
 
 app.get('/fail', function (req, res)
 {
-	return res.redirect('login.html');
+	return res.redirect('/login');
 });
-
+app.disable('admin.html');
 app.get('/admin.html', function (req, res)
 {
 	return res.redirect('/');
-});
-
-app.get('/show_books', function (req, res)
-{
-	return res.redirect('show_books.html');
 });
 
 app.get('/', function(req, res)
@@ -126,11 +121,11 @@ app.get('/', function(req, res)
 
 app.get('/logout', function (req, res)
 {
-	console.log('Zakończenie sesji użytkownika');
+	console.log('Zakończenie sesji');
 	req.logout();
 	client.end(function(err)
 	{
-		console.log("Rozłączono z bazą danych");
+		console.log("Rozłączono z mysql");
 	});
 	return res.redirect('/');
 });
@@ -151,24 +146,43 @@ app.get('/show_username', function (req, res)
 	console.log("aktualnie jako: "+req.user.username);
 	return res.send({username: req.user.username});
 });
+
+
 app.get('/book_list_all', function (req, res) {
-    client = mysql.createConnection(sqlInfo);
-    client.query('SELECT title,author,description,status FROM books ;',function (err,rows){
-    if(err){
-      console.log(err);           
-    }
-       return res.send(rows);  
-    });
+	if(req.user && req.user.admin === 'admin')
+	{
+	    client = mysql.createConnection(sqlInfo);
+	    if(req.user)
+	    client.query('SELECT title,author,description,status FROM books ;',function (err,rows){
+	    if(err){
+	      console.log(err);           
+	    }
+	       return res.send(rows);  
+	    });
+	}
+	else
+	{
+		 return res.redirect('/login');
+	}
+
 });
 app.get('/show_lended_admin_userlist', function (req, res) {
-	client1 = mysql.createConnection(sqlInfo);
-	client1.query('SELECT DISTINCT user FROM lended ;',function (err,rows)
-		{
-		if(err){
-		console.log(err);           
-		}
-		return res.send(rows);  
-	});
+	if(req.user && req.user.admin === 'admin')
+	{
+		client1 = mysql.createConnection(sqlInfo);
+		client1.query('SELECT DISTINCT user FROM lended ;',function (err,rows)
+			{
+			if(err){
+			console.log(err);           
+			}
+			return res.send(rows);  
+		});		
+	}
+	else
+	{
+		 return res.redirect("/login");
+	}
+
 });
 app.get('/show_lended_admin_booklist_user', function (req, res) {
 	client1 = mysql.createConnection(sqlInfo);
@@ -182,33 +196,56 @@ app.get('/show_lended_admin_booklist_user', function (req, res) {
 });
 
 app.get('/rented_book_list', function (req, res) {
-    client = mysql.createConnection(sqlInfo);
-    console.log(req.user);
-    client.query('SELECT title,author FROM lended WHERE user ="'+req.user.username+'";',function (err,rows){
-    if(err){
-      console.log(err);           
+    if(req.user)
+    {
+    		    client = mysql.createConnection(sqlInfo);
+	    console.log(req.user);
+	    client.query('SELECT title,author FROM lended WHERE user ="'+req.user.username+'";',function (err,rows){
+	    if(err){
+	      console.log(err);           
+	    }
+	       return res.send(rows);  
+	    });
     }
-       return res.send(rows);  
-    });
+    else
+    {
+    	return res.redirect("/login");
+    }
+
 });
 app.get('/book_list_avaible', function (req, res) {
-    client = mysql.createConnection(sqlInfo);
-    client.query('SELECT title,author,description FROM books WHERE status ="not";',function (err,rows){
-    if(err){
-      console.log(err);           
+    if(req.user)
+    {
+	    client = mysql.createConnection(sqlInfo);
+	    client.query('SELECT title,author,description FROM books WHERE status ="not";',function (err,rows){
+	    if(err){
+	      console.log(err);           
+	    }
+	       return res.send(rows);  
+	    });
     }
-       return res.send(rows);  
-    });
+    else
+    {
+    	return res.redirect("/login");
+    }
+
 });
 
 app.get('/book_list_rented', function (req, res) {
-    client = mysql.createConnection(sqlInfo);
-    client.query('SELECT title,author,description FROM books WHERE status ="yes";',function (err,rows){
-    if(err){
-      console.log(err);           
+    if(req.user)
+    {
+		client = mysql.createConnection(sqlInfo);
+	    client.query('SELECT title,author,description FROM books WHERE status ="yes";',function (err,rows){
+	    if(err){
+	      console.log(err);           
+	    }
+	       return res.send(rows);  
+	    });
     }
-       return res.send(rows);  
-    });
+	else
+	{
+		return res.redirect("/login");
+	}
 });
 ///////////////////////////////////////////
 //     zwrot książki
@@ -367,6 +404,19 @@ app.post('/user_existance', function (req, res)
 			return res.send(false);  
 		}
 	});
+});
+app.get('/password_existance', function (req, res)
+{
+	var nick_to_check = req.body.username;
+	var pass_to_check = req.body.password;
+    client = mysql.createConnection(sqlInfo);
+    client.query("select nick,password from users WHERE nick='"+nick_to_check+"' AND password = '"+pass_to_check+"';",function (err,rows)
+    {
+	    if(err){
+	      console.log(err);           
+	    }
+	       return res.send(''+rows.length);  
+	    });
 });
 ///////////////////////////////////////////
 //     serwer start
