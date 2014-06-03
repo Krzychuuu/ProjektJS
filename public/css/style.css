@@ -40,6 +40,9 @@ body {
   background: darkgray;
   color: white;
 }
+.admin_return_td {
+  border: 1px solid black;
+}
 .booklist_title_tr td {
   border: 1px solid white;
 }
@@ -73,7 +76,7 @@ body {
 .lended_admin_book td {
   width: 50%;
   text-align: center;
-  border: 1px dotted black;
+  border: 1px solid black;
   background: lightgray;
   vertical-align: middle;
 }
@@ -138,4 +141,12 @@ A:hover {
   position: static;
   height: 40px;
   text-align: center;
+}
+@media (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+  .booklist {
+    width: 100%;
+  }
+  .lended_admin {
+    width: 100%;
+  }
 }

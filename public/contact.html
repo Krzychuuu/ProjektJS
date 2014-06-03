@@ -44,16 +44,18 @@
 	  	<div class="container">
 	  	
 	  	<h4>Skorzystaj z formularza by wysłać maila do administratora.</h4><br>
-	  			<form action="MAILTO:jurasik@tlen.com" method="post" enctype="text/plain">
-	<Label>Imię:</Label><br>
-	<input type="text" name="name"><br>
-	<Label>Twój mail:</Label><br>
-	<input type="text" name="mail"><br>
-	<Label>Treść:</Label><br>
-	<input type="text" name="comment" size="50"><br><br>	
-	<input type="submit" value="Wyślij">
-	<input type="reset" value="Czyść">
-	</form>
+		<form action="MAILTO:jurasik@tlen.com" method="post" enctype="text/plain">
+			<Label>Imię:</Label><br>
+			<input type="text" name="name"><br>
+			<Label>Twój mail:</Label><br>
+			<input type="text" name="mail"><br>
+			<Label>Temat:</Label><br>
+			<input type="text" name="subject"><br>
+			<Label>Treść:</Label><br>
+			<input type="text" name="comment" size="50"><br><br>	
+			<input type="submit" value="Wyślij">
+			<input type="reset" value="Czyść">
+		</form>
 			<br>
 			<p class="error" id="error_message"></p>
 	  </div>
