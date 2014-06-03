@@ -99,32 +99,34 @@ io.sockets.on('connection', function (socket) {
   socket.on('new_user_logged', function (username) {
     var found = false;
 		for(var j = 0; j < logged_users.length; j++)
-    {
-      if(logged_users[j]===username)
-      {
-        found=true;
-        break;
-      }
-    }
-    if(username === "admin" || found)
-    {}
-    else
-    {
-      logged_users.push(username);
-      logged_users.sort();
-      socket.emit('logged users', ArrNoDupe(logged_users));
-    }
-    
+	    {
+	    	if(logged_users[j]===username)
+	    	{
+	    		found=true;
+	    		break;
+			}
+		}
+	    if(username === "admin" || found)
+	    {}
+	    else
+	    {
+	      logged_users.splice(logged_users.indexOf("null"),1);
+	      logged_users.push(username);
+	      logged_users.sort();
+	      io.sockets.emit('logged users', ArrNoDupe(logged_users));
+	    }
   });
 	socket.on('socket_show_logged_users', function()
 	{
-		socket.emit('logged users', ArrNoDupe(logged_users));
+		logged_users.splice(logged_users.indexOf("null"),1);
+		io.sockets.emit('logged users', ArrNoDupe(logged_users));
 	});
 	socket.on('user_logout', function(username)
 	{
 		logged_users.splice(logged_users.indexOf(username),1);
-    logged_users.sort();
-    socket.emit('logged users', ArrNoDupe(logged_users));
+		logged_users.splice(logged_users.indexOf("null"),1);
+	    logged_users.sort();
+	    io.sockets.emit('logged users', ArrNoDupe(logged_users));
 	});
 
 });
@@ -137,6 +139,11 @@ var ArrNoDupe = function(a) {
       r.push(k);
     return r;
 };
+	socket.on('rented_or_returned', function(hidden_title,hidden_author,actual_user)
+	{
+	    io.sockets.emit('rented_or_returned change');
+	    io.sockets.emit('admin status panel change', hidden_title,hidden_author,actual_user);
+	});
 ///////////////////////////////////////////
 //     przekierowania
 app.post('/login', passport.authenticate('local',
@@ -307,16 +314,16 @@ app.post('/return', function (req, res)
 	var rented_author = req.body.hidden_author;
 	console.log("trying to return: "+rented_title+", "+rented_author);
 	client = mysql.createConnection(sqlInfo);
-  client.query('UPDATE books SET status ="not" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
-  client.query('DELETE FROM lended WHERE user = "'+req.user.username+'" AND title = "'+rented_title+'" AND author = "'+rented_author+'" ;', function (err,rows)
-                          {
-                            console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
-                            if(err)
-                            {
-                              console.log(err);           
-                            }
-                          });
-  return res.redirect('/');
+	client.query('UPDATE books SET status ="not" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
+	client.query('DELETE FROM lended WHERE user = "'+req.user.username+'" AND title = "'+rented_title+'" AND author = "'+rented_author+'" ;', function (err,rows)
+	{
+		console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
+		if(err)
+		{
+			console.log(err);           
+		}
+	});
+	return res.redirect('/');
 });
   ///////////////////////////////////////////
   //     zwrot książki przez admina
@@ -349,20 +356,20 @@ app.post('/rent', function (req, res)
 	console.log("trying to rent: "+rented_title+", "+rented_author);
 	client = mysql.createConnection(sqlInfo);
 	client.query('UPDATE books SET status ="yes" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
-  var to_rent = {
-    user: req.user.username,
-    title: rented_title,
-    author: rented_author
-  };
-  client.query('INSERT INTO lended SET ? ;', to_rent, function (err,rows)
-                          {
-                            console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
-                            if(err)
-                            {
-                              console.log(err);           
-                            }
-                          });
-  return res.redirect('/');
+	var to_rent = {
+	    user: req.user.username,
+	    title: rented_title,
+	    author: rented_author
+	};
+	client.query('INSERT INTO lended SET ? ;', to_rent, function (err,rows)
+	{
+		console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
+		if(err)
+		{
+			console.log(err);           
+		}
+	});
+	return res.redirect('/');
 });
 
 ///////////////////////////////////////////

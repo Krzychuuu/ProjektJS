@@ -1,7 +1,8 @@
 /*jshint globalstrict: true, devel: true, browser: true, jquery: true */
 /* global io */
 
-var socket = io.connect('http://' + location.host);
+var socket = io.connect();
+
 
 $(document).ready(function () {
 	var actual_user;
@@ -13,8 +14,8 @@ $(document).ready(function () {
 		});	
 	}
 	socket.on('connect', function () {
-	console.log("socket dziala");
-    socket.emit('new_user_logged', actual_user);
+		console.log("socket dziala");
+	    socket.emit('new_user_logged', actual_user);
 	});
 	$('#give_book_list_admin').click(function()
 	{
@@ -36,19 +37,18 @@ $(document).ready(function () {
 	$('#show_logged_users').click(function()
 	{
 		socket.emit('socket_show_logged_users');
-		$(".jumbotron > .container").html("<ul id='logged_user_list'>Zalogowani użytkownicy:</ul>");
+		$(".jumbotron > .container").html("<ul id='logged_user_list'>Zalogowani użytkownicy (odświeżanie real time):</ul>");
 	});	
 	socket.on('logged users', function(logged_users)
 	{
 		if($('#logged_user_list').length > 0)
 		{
-			$("#logged_user_list > li").empty();
+			$("#logged_user_list > li").remove();
 			for (var i=0;i<logged_users.length;i++){
 				$("#logged_user_list").append("<li>"+logged_users[i]+"</li>");
 			}
 		}
 	});
-
 	$('#show_lended_admin').click(function()
 	{
 		$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
@@ -63,7 +63,6 @@ $(document).ready(function () {
 				get_books_for_user(tmp_username);
 			}
 		});
-		
 			
 	});
 	$('#logout').click(function()
