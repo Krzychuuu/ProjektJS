@@ -114,6 +114,7 @@ io.sockets.on('connection', function (socket) {
 	      logged_users.push(username);
 	      logged_users.sort();
 	      io.sockets.emit('logged users', ArrNoDupe(logged_users));
+	      io.sockets.emit('admin status user logged', username);
 	    }
   });
 	socket.on('socket_show_logged_users', function()
@@ -127,8 +128,20 @@ io.sockets.on('connection', function (socket) {
 		logged_users.splice(logged_users.indexOf("null"),1);
 	    logged_users.sort();
 	    io.sockets.emit('logged users', ArrNoDupe(logged_users));
+	    io.sockets.emit('admin status user loggedout', username)
 	});
-
+	socket.on('rented', function(data)
+	{
+	    io.sockets.emit('rented change');
+	    io.sockets.emit('admin status panel change rent', data);
+	});
+	socket.on('returned', function(data)
+	{
+	    io.sockets.emit('returned change');
+	    io.sockets.emit('admin status panel change return', data);
+	});
+	
+///////////////// SOCKETS ENDING ////////////////////
 });
 var ArrNoDupe = function(a) {
     var temp = {};
@@ -139,11 +152,7 @@ var ArrNoDupe = function(a) {
       r.push(k);
     return r;
 };
-	socket.on('rented_or_returned', function(hidden_title,hidden_author,actual_user)
-	{
-	    io.sockets.emit('rented_or_returned change');
-	    io.sockets.emit('admin status panel change', hidden_title,hidden_author,actual_user);
-	});
+
 ///////////////////////////////////////////
 //     przekierowania
 app.post('/login', passport.authenticate('local',

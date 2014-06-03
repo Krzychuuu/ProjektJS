@@ -15,6 +15,12 @@ $(document).ready(function () {
 	    console.log("socket dziala");
 	    socket.emit('new_user_logged', actual_user);
 	});
+	socket.on('rented change', function () {
+	   give_book_list_nonadmin_out();
+	});
+	socket.on('returned change', function () {
+	   give_rented_books_list_to_return_nonadmin_out();
+	});
 	$('#give_book_list_nonadmin').click(function()
 	{
 		if(actual_user===undefined)
@@ -23,7 +29,7 @@ $(document).ready(function () {
 		}
 		else
 		{
-			give_book_list_nonadmin_out();
+			give_book_list_nonadmin_out(actual_user);
 		}
 	});
 	
@@ -46,7 +52,7 @@ $(document).ready(function () {
 		}
 		else
 		{
-			give_rented_books_list_to_return_nonadmin_out();
+			give_rented_books_list_to_return_nonadmin_out(actual_user);
 		}
 	});
 	$('#logout').click(function()
@@ -91,7 +97,7 @@ var books_rented = function()
 	booksDescribe();
 	});
 };
-var give_book_list_nonadmin_out = function()
+var give_book_list_nonadmin_out = function(actual_user)
 {
 	$.getJSON("/book_list_avaible", function(data)
 	{
@@ -115,8 +121,13 @@ var give_book_list_nonadmin_out = function()
 				data: JSON.stringify({hidden_title: hidden_title, hidden_author:hidden_author}),
 				async: false, 
 			});
+			var data = {
+				socket_hidden_title:hidden_title,
+				socket_hidden_author:hidden_author,
+				socket_actual_user:actual_user,
+			};
+			socket.emit("rented",data);
 			alert("Wypożyczyłeś "+hidden_title+", "+hidden_author);
-			socket.emit("rented_or_returned",hidden_title,hidden_author,actual_user);
 		});
 	});	
 	books_rented();
@@ -133,7 +144,7 @@ var give_rented_books_list_nonadmin_out = function()
 		}
 	});	
 };
-var give_rented_books_list_to_return_nonadmin_out = function()
+var give_rented_books_list_to_return_nonadmin_out = function(actual_user)
 {
 	$.getJSON("/rented_book_list", function(data)
 	{
@@ -156,8 +167,13 @@ var give_rented_books_list_to_return_nonadmin_out = function()
 				data: JSON.stringify({hidden_title: hidden_title, hidden_author:hidden_author}),
 				async: false, 
 			});
+			var data = {
+				socket_hidden_title:hidden_title,
+				socket_hidden_author:hidden_author,
+				socket_actual_user:actual_user,
+			};
+			socket.emit("returned",data);
 			alert("Zwróciłeś "+hidden_title+", "+hidden_author);
-			socket.emit("rented_or_returned",hidden_title,hidden_author,actual_user);
 		});
 	});	
 };
