@@ -118,7 +118,10 @@ app.get('/', function(req, res)
         return res.redirect('/login');
     }
 });
-
+app.get('/contact', function (req, res)
+{
+	return res.redirect('contact.html');
+});
 app.get('/logout', function (req, res)
 {
 	console.log('Zakończenie sesji');
