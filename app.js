@@ -110,22 +110,22 @@ io.sockets.on('connection', function (socket) {
 	    {}
 	    else
 	    {
-	      logged_users.splice(logged_users.indexOf("null"),1);
 	      logged_users.push(username);
 	      logged_users.sort();
+	      console.log(logged_users);
+	      console.log("-----");
+	      console.log(ArrNoDupe(logged_users));
 	      io.sockets.emit('logged users', ArrNoDupe(logged_users));
 	      io.sockets.emit('admin status user logged', username);
 	    }
   });
 	socket.on('socket_show_logged_users', function()
 	{
-		logged_users.splice(logged_users.indexOf("null"),1);
 		io.sockets.emit('logged users', ArrNoDupe(logged_users));
 	});
 	socket.on('user_logout', function(username)
 	{
 		logged_users.splice(logged_users.indexOf(username),1);
-		logged_users.splice(logged_users.indexOf("null"),1);
 	    logged_users.sort();
 	    io.sockets.emit('logged users', ArrNoDupe(logged_users));
 	    io.sockets.emit('admin status user loggedout', username);

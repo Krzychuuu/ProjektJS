@@ -68,15 +68,8 @@ $(document).ready(function () {
 	});
 	$('#show_logged_users').click(function()
 	{
-		if(actual_user===undefined)
-		{
-			$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
-		}
-		else
-		{
-			socket.emit('socket_show_logged_users');
-			$(".jumbotron > .container").html("<ul id='logged_user_list'>Zalogowani użytkownicy (odświeżanie real time):</ul>");			
-		}
+			$(".jumbotron > .container").html("<ul id='logged_user_list'>Zalogowani użytkownicy (odświeżanie real time):</ul>");
+			socket.emit('socket_show_logged_users');			
 	});	
 	socket.on('logged users', function(logged_users)
 	{
