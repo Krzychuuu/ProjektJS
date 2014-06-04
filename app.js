@@ -106,7 +106,7 @@ io.sockets.on('connection', function (socket) {
 	    		break;
 			}
 		}
-	    if(username === "admin" || found)
+	    if(username === "admin" || username === "null" || found)
 	    {}
 	    else
 	    {
@@ -393,16 +393,16 @@ app.post('/register_user', function (req, res)
 {
 	var data = req.body;
 	delete data.confirm_password;
-    client = mysql.createConnection(sqlInfo);
- client.query('INSERT INTO users SET ? ;',data,function (err,rows)
-                         {
-                           console.log("registered");
-                           if(err)
-                           {
-                             console.log(err);
-                           }
-                         });
-  return res.redirect('/');
+	client = mysql.createConnection(sqlInfo);
+	client.query('INSERT INTO users SET ? ;',data,function (err,rows)
+	{
+		console.log("registered");
+		if(err)
+		{
+			console.log(err);
+		}
+	});
+	return res.redirect('/');
 });
 
 ///////////////////////////////////////////
@@ -423,16 +423,16 @@ app.get('/add_book', function (req, res)
 app.post('/add_book', function (req, res)
 {
 	var data = req.body;
-    client = mysql.createConnection(sqlInfo);
-  client.query('INSERT INTO books SET ? ;',data,function (err,rows)
-                         {
-                           console.log("book added");
-                           if(err)
-                           {
-                             console.log(err);           
-                           }
-                         });
-  return res.redirect('/');
+	client = mysql.createConnection(sqlInfo);
+	client.query('INSERT INTO books SET ? ;',data,function (err,rows)
+	{
+		console.log("book added");
+		if(err)
+		{
+			console.log(err);           
+		}
+	});
+	return res.redirect('/');
 });
 
 ///////////////////////////////////////////
@@ -453,13 +453,13 @@ app.post('/user_existance', function (req, res)
 		{
 			if(rows[0])
 			{
-        return res.send(true);  
-      }
-      else
-      {
-        return res.send(false);  
-      }
-    }
+	        	return res.send(true);  
+			}
+			else
+			{
+				return res.send(false);  
+			}
+    	}
 		else
 		{
 			console.log("not found in db");

@@ -59,7 +59,7 @@ $(document).ready(function () {
 	{
 		if(actual_user===undefined)
 		{
-			$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
+			$(".jumbotron > .container").html("<p>Zaloguj się cwaniaczku.</p>");
 		}
 		else
 		{
@@ -73,6 +73,12 @@ $(document).ready(function () {
 	});	
 	socket.on('logged users', function(logged_users)
 	{
+		if(actual_user===undefined)
+		{
+			$(".jumbotron > .container").html("<p>Zaloguj się cwaniaczku.</p>");
+		}
+		else
+		{
 		if($('#logged_user_list').length > 0)
 		{
 			$("#logged_user_list > li").remove();
@@ -80,12 +86,13 @@ $(document).ready(function () {
 				$("#logged_user_list").append("<li>"+logged_users[i]+"</li>");
 			}
 		}
+		}
 	});
 	$('#show_lended_admin').click(function()
 	{
 		if(actual_user===undefined)
 		{
-			$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
+			$(".jumbotron > .container").html("<p>Zaloguj się cwaniaczku.</p>");
 		}
 		else
 		{
