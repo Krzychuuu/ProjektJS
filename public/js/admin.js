@@ -23,12 +23,30 @@ $(document).ready(function () {
 		{
 			give_book_list_admin_out();
 		}
+		if($('#lended_admin').length > 0)
+		{
+			show_lended_admin_out();
+		}
 	});
 	socket.on('admin status panel change rent', function (data) {
 		$('#whats_going_on_status').html("Użytkownik "+data.socket_actual_user+" wypożyczył "+data.socket_hidden_title+" autorstwa "+data.socket_hidden_author);
 		if($('#booklist_admin').length > 0)
 		{
 			give_book_list_admin_out();
+		}
+	});
+	socket.on('rented_change', function()
+	{
+		if($('#lended_admin').length > 0)
+		{
+			show_lended_admin_out();
+		}
+	});
+	socket.on('returned_change', function()
+	{
+		if($('#lended_admin').length > 0)
+		{
+			show_lended_admin_out();
 		}
 	});
 	socket.on('admin status user logged', function (data) {
@@ -50,8 +68,15 @@ $(document).ready(function () {
 	});
 	$('#show_logged_users').click(function()
 	{
-		socket.emit('socket_show_logged_users');
-		$(".jumbotron > .container").html("<ul id='logged_user_list'>Zalogowani użytkownicy (odświeżanie real time):</ul>");
+		if(actual_user===undefined)
+		{
+			$(".jumbotron > .container").html("<p>Zalgouj się cwaniaczku.</p>");
+		}
+		else
+		{
+			socket.emit('socket_show_logged_users');
+			$(".jumbotron > .container").html("<ul id='logged_user_list'>Zalogowani użytkownicy (odświeżanie real time):</ul>");			
+		}
 	});	
 	socket.on('logged users', function(logged_users)
 	{
@@ -87,10 +112,11 @@ var get_books_for_user = function(tmp_username){
 	{
 		for(var j = 0; j < data.length ; j++)
 		{
-			if(data[j].user == tmp_username){
-				$("#lended_admin_"+data[j].user).append("<tr class='lended_admin_book'><td>"+data[j].title+"</td><td>"+data[j].author+"</td><td class='admin_return_td'><form action='/admin_return' method='post'><input type='hidden' value='"+data[j].title+"' id='hidden_title' name='hidden_title'/><input type='hidden' value='"+data[j].author+"' id='hidden_author' name='hidden_author'/><input type='hidden' value='"+data[j].user+"' id='hidden_user' name='hidden_user'/><input id='' type='submit' value='ZWROT'/></form></td></tr>");
+			if(data[j].user === tmp_username){
+				$("#lended_admin"+data[j].user).append("<tr class='lended_admin_book'><td>"+data[j].title+"</td><td>"+data[j].author+"</td><td class='admin_return_td'><button class='zwrot_admin' title='"+data[j].title+"' author='"+data[j].author+"' user='"+data[j].user+"'>ZWROT</button></td></tr>");
 			}
 		}
+	get_return_admin_button();
 	});
 };
 var give_book_list_admin_out = function()
@@ -115,11 +141,36 @@ var show_lended_admin_out = function()
 	{
 		$(".jumbotron > .container").html("<h4>Użytkownicy wraz z wypożyczeniami:</h4>");
 		for(var i = 0; i < data.length ; i++){
-			$(".jumbotron > .container").append("<table class='lended_admin' id='lended_admin_"+data[i].user+"'><tbody></tbody></table><br>");
-			$("#lended_admin_"+data[i].user).append("<tr class='lended_admin_username'><td colspan='2'>"+data[i].user+"</td></tr>");
-			$("#lended_admin_"+data[i].user).append("<tr class='lended_admin_username'><td>Tytuł</td><td>Autor</td></tr>");
+			$(".jumbotron > .container").append("<table class='lended_admin' id='lended_admin"+data[i].user+"'><tbody></tbody></table><br>");
+			$("#lended_admin"+data[i].user).append("<tr class='lended_admin_username'><td colspan='2'>"+data[i].user+"</td></tr>");
+			$("#lended_admin"+data[i].user).append("<tr class='lended_admin_username'><td>Tytuł</td><td>Autor</td></tr>");
 			var tmp_username = data[i].user;
 			get_books_for_user(tmp_username);
 		}
 	});
+};
+var get_return_admin_button = function()
+{
+		$(".zwrot_admin").click(function()
+			{
+				var hidden_title = $(this).attr("title");
+				var hidden_author = $(this).attr("author");
+				var hidden_user = $(this).attr("user");
+				$.ajax(
+				{
+					type: "POST",
+					url: "/admin_return",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({hidden_title: hidden_title, hidden_author:hidden_author, hidden_user:hidden_user}),
+					async: false, 
+				});
+				var data = {
+					socket_hidden_title:hidden_title,
+					socket_hidden_author:hidden_author,
+					socket_actual_user:hidden_user,
+				};
+				socket.emit("returned",data);
+				alert("done");
+		});
 };

@@ -128,7 +128,7 @@ io.sockets.on('connection', function (socket) {
 		logged_users.splice(logged_users.indexOf("null"),1);
 	    logged_users.sort();
 	    io.sockets.emit('logged users', ArrNoDupe(logged_users));
-	    io.sockets.emit('admin status user loggedout', username)
+	    io.sockets.emit('admin status user loggedout', username);
 	});
 	socket.on('rented', function(data)
 	{
@@ -337,23 +337,23 @@ app.post('/return', function (req, res)
   ///////////////////////////////////////////
   //     zwrot książki przez admina
   
-  app.post('/admin_return', function (req, res)
+app.post('/admin_return', function (req, res)
 {
 	var rented_title = req.body.hidden_title;
 	var rented_author = req.body.hidden_author;
 	var renting_user = req.body.hidden_user;
 	console.log("trying to return: "+rented_title+", "+rented_author);
 	client = mysql.createConnection(sqlInfo);
-  client.query('UPDATE books SET status ="not" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
- client.query('DELETE FROM lended WHERE user = "'+renting_user+'" AND title = "'+rented_title+'" AND author = "'+rented_author+'" ;', function (err,rows)
-                          {
-                            console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
-                            if(err)
-                            {
-                              console.log(err);           
-                            }
-                          });
-  return res.redirect('/');
+	client.query('UPDATE books SET status ="not" WHERE title = "'+rented_title+'" AND author = "'+rented_author+'";',function(err, result) {});
+	client.query('DELETE FROM lended WHERE user = "'+renting_user+'" AND title = "'+rented_title+'" AND author = "'+rented_author+'" ;', function (err,rows)
+	{
+		console.log(rented_title+", "+rented_author+" rented to: "+req.user.username);
+		if(err)
+		{
+			console.log(err);           
+		}
+	});
+	return res.redirect('/');
 });
 ///////////////////////////////////////////
 //     wypożyczenie książki
